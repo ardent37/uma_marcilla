@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Tienda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --white: #ffffff;
+      --bg: #f7f7f5;
+      --text-primary: #111111;
+      --text-secondary: #666666;
+      --accent: #1a1a1a;
+      --credit-color: #c8973a;
+      --card-bg: #ffffff;
+      --border: #e8e8e4;
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+      --shadow-hover: 0 8px 28px rgba(0,0,0,0.13);
+      --banner-h: 140px;
+      --radius: 14px;
+      --gap: 12px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── BANNER ── */
+    .banner {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: var(--banner-h);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 0 16px;
+    }
+
+    .banner__logo {
+      max-height: calc(var(--banner-h) - 32px);
+      max-width: 55%;
+      object-fit: contain;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .banner__icons {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 1;
+    }
+
+    .banner__icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .banner__icons img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    /* ── GRID ── */
+    .catalog {
+      padding: 20px var(--gap) 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card:active {
+      transform: scale(0.97);
+      box-shadow: var(--shadow);
+    }
+
+    .card__img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #f0efec;
+    }
+
+    .card__img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .card:hover .card__img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .card__info {
+      padding: 10px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card__name {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    .card__price {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.73rem;
+      font-weight: 500;
+      color: var(--credit-color);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card__price::before {
+      content: '✦';
+      font-size: 0.6rem;
+      opacity: 0.8;
+    }
+
+    /* ── PLACEHOLDER cards (demo) ── */
+    .card__img-wrap.placeholder {
+      background: linear-gradient(135deg, #ede9e1 0%, #ddd9d0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__img-wrap.placeholder::after {
+      content: '';
+      width: 38%;
+      height: 38%;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.45);
+    }
+
+    /* Staggered fade-in */
+    .card {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.45s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:nth-child(1)  { animation-delay: 0.05s; }
+    .card:nth-child(2)  { animation-delay: 0.10s; }
+    .card:nth-child(3)  { animation-delay: 0.15s; }
+    .card:nth-child(4)  { animation-delay: 0.20s; }
+    .card:nth-child(5)  { animation-delay: 0.25s; }
+    .card:nth-child(6)  { animation-delay: 0.30s; }
+    .card:nth-child(7)  { animation-delay: 0.35s; }
+    .card:nth-child(8)  { animation-delay: 0.40s; }
+    .card:nth-child(9)  { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.50s; }
+
+    /* ── POPUP ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .overlay.hidden {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .popup {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 36px 28px 32px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(32px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .popup__title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .popup__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .popup__img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      margin-top: 4px;
+    }
+
+    .popup__btn {
+      margin-top: 8px;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 36px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .popup__btn:active {
+      opacity: 0.8;
+      transform: scale(0.97);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 20px 16px 32px;
+      font-size: 0.7rem;
+      color: #bbbbbb;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER -->
+  <header class="banner">
+    <img class="banner__logo" src="logo.png" alt="Logo" />
+    <div class="banner__icons">
+      <a href="#"><img src="carrito.png" alt="Carrito" /></a>
+      <a href="#"><img src="menu.png" alt="Menú" /></a>
+    </div>
+  </header>
+
+  <!-- PRODUCT GRID -->
+  <main class="catalog">
+
+    <!-- Caja de cápsulas -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/capsulas.png" alt="Caja de cápsulas (x10)" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Caja de cápsulas (x10)</span>
+        <span class="card__price">10 créditos</span>
+      </div>
+    </div>
+
+    <!-- Taza -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/taza.png" alt="Taza" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Taza</span>
+        <span class="card__price">25 créditos</span>
+      </div>
+    </div>
+
+    <!-- Set de tazas -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/set-tazas.png" alt="Set de tazas" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Set de tazas</span>
+        <span class="card__price">35 créditos</span>
+      </div>
+    </div>
+
+    <!-- Posavasos -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/posavasos.png" alt="Posavasos" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Posavasos</span>
+        <span class="card__price">5 créditos</span>
+      </div>
+    </div>
+
+    <!-- Calendario -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/calendario.png" alt="Calendario" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Calendario</span>
+        <span class="card__price">20 créditos</span>
+      </div>
+    </div>
+
+    <!-- Imán -->
+    <div class="card">
+      <div class="card__img-wrap">
+        <img src="productos/iman.png" alt="Imán" loading="lazy" />
+      </div>
+      <div class="card__info">
+        <span class="card__name">Imán</span>
+        <span class="card__price">10 créditos</span>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">© 2025 · Todos los derechos reservados</footer>
+
+  <!-- POPUP -->
+  <div class="overlay" id="overlay">
+    <div class="popup">
+      <p class="popup__title">Gracias por su compra</p>
+      <p class="popup__subtitle">Se ha añadido 1 crédito a su cuenta</p>
+      <img class="popup__img" src="masuno.png" alt="+1 crédito" />
+      <button class="popup__btn" onclick="document.getElementById('overlay').classList.add('hidden')">Aceptar</button>
+    </div>
+  </div>
+
+</body>
+</html>
